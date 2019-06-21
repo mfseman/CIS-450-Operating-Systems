@@ -1,0 +1,161 @@
+Marco Seman and Jason Lu
+Project 3
+March 16, 2019
+
+BOUNDED BUFFER PROBLEM:
+
+How to run: use command "make" inside the directiory, then enter "./BoundedBuffer 100 100
+
+For this program, we started off with the program that the professor gave us and worked from there. The bounded buffer is used to wrap the buffer size. Semaphores are used to determine whether to wait for the buffer that is either empty or full. Mutual exclusion is then used prior to making changes to the program. 
+
+Sample output:
+$ ./BoundedBuffer 100 100
+the total is 4950
+the total is 4950
+the total is 4950
+$ ./BoundedBuffer 100 10
+the total is 4350
+the total is 5085
+the total is 5415
+$ ./BoundedBuffer 10000 100
+the total is 51911460
+the total is 53061772
+the total is 45011768
+
+BRIDGE PROBLEM:
+
+How to run: use command "make" inside the directory, then enter "./Bridge". you can modify the size of the bridge by modifying the defined thread in the program 
+
+For this program we used pthreads, mutex, and conditional variables.
+
+For the bool isSafe function, we needed to check if it is safe for the vehicle to pass through the bridge. an if else statement was created to make sure that if the bridge only had 3 vehicles, then cars may pass by. If there were more than 3 vehicles, then the isSafe function will return false so the car cannot pass.
+
+For the ArriveBridge function we created a mutex to lock the memory address of the vehicle mutex. a while loop calling the issafe function making sure it repeats itself until it is safe for the vehicle to cross the bridge. We then print out the proper outputs and then unlock the mutex and use the sched_yield() function to check if the other threads are in the ready state.
+
+For the CrossBridge function, we again created a mutex to lock the memory address of the vehicle mutex. we printed out the proper outputs of the car crossing the bridge based on their direction, vehicle id, and the number of vehicles. We then had to unlock the mutex and place the other functions of the threads in the ready state using sched yield.
+
+For the ExitBridge function, we locked the mutex as always and decrement the number of vehicles crossing the bridge. 
+
+The OneVehicle creates a random direction and calls the functions of arrive, cross, and exit bridge.
+
+The main is where everything is called, first we assign the number of threads, initialize the mutex, condition variables, and the threads are created in a joinable state. a for loop is then created to simulate and create the threads then have those threads join one another in groups.
+
+
+Sample output:
+Car 0 dir North arrives at bridge. 
+Car 1 dir North arrives at bridge. 
+Car 2 dir North arrives at bridge. 
+Car 1 dir North crossing the bridge. The current dir is North. #Cars: 3. 
+Car 1 dir North exits from bridge. 
+Car 5 dir North arrives at bridge. 
+Car 2 dir North crossing the bridge. The current dir is North. #Cars: 3. 
+Car 5 dir North crossing the bridge. The current dir is North. #Cars: 3. 
+Car 2 dir North exits from bridge. 
+Car 3 dir North arrives at bridge. 
+Car 5 dir North exits from bridge. 
+Car 4 dir North arrives at bridge. 
+Car 4 dir North crossing the bridge. The current dir is North. #Cars: 3. 
+Car 3 dir North crossing the bridge. The current dir is North. #Cars: 3. 
+Car 3 dir North exits from bridge. 
+Car 7 dir North arrives at bridge. 
+Car 7 dir North crossing the bridge. The current dir is North. #Cars: 3. 
+Car 4 dir North exits from bridge. 
+Car 7 dir North exits from bridge. 
+Car 6 dir North arrives at bridge. 
+Car 0 dir North crossing the bridge. The current dir is North. #Cars: 2. 
+Car 0 dir North exits from bridge. 
+Car 8 dir North arrives at bridge. 
+Car 11 dir North arrives at bridge. 
+Car 11 dir North crossing the bridge. The current dir is North. #Cars: 3. 
+Car 11 dir North exits from bridge. 
+Car 6 dir North crossing the bridge. The current dir is North. #Cars: 2. 
+Car 6 dir North exits from bridge. 
+Car 14 dir North arrives at bridge. 
+Car 14 dir North crossing the bridge. The current dir is North. #Cars: 2. 
+Car 8 dir North crossing the bridge. The current dir is North. #Cars: 2. 
+Car 8 dir North exits from bridge. 
+Car 14 dir North exits from bridge. 
+Car 13 dir South arrives at bridge. 
+Car 15 dir South arrives at bridge. 
+Car 15 dir South crossing the bridge. The current dir: South. #Cars: 2. 
+Car 15 dir South exits from bridge. 
+Car 19 dir South arrives at bridge. 
+Car 16 dir South arrives at bridge. 
+Car 13 dir South crossing the bridge. The current dir: South. #Cars: 3. 
+Car 16 dir South crossing the bridge. The current dir: South. #Cars: 3. 
+Car 13 dir South exits from bridge. 
+Car 10 dir South arrives at bridge. 
+Car 10 dir South crossing the bridge. The current dir: South. #Cars: 3. 
+Car 10 dir South exits from bridge. 
+Car 12 dir South arrives at bridge. 
+Car 12 dir South crossing the bridge. The current dir: South. #Cars: 3. 
+Car 12 dir South exits from bridge. 
+Car 9 dir South arrives at bridge. 
+Car 9 dir South crossing the bridge. The current dir: South. #Cars: 3. 
+Car 16 dir South exits from bridge. 
+Car 9 dir South exits from bridge. 
+Car 18 dir South arrives at bridge. 
+Car 21 dir South arrives at bridge. 
+Car 18 dir South crossing the bridge. The current dir: South. #Cars: 3. 
+Car 21 dir South crossing the bridge. The current dir: South. #Cars: 3. 
+Car 18 dir South exits from bridge. 
+Car 22 dir South arrives at bridge. 
+Car 19 dir South crossing the bridge. The current dir: South. #Cars: 3. 
+Car 21 dir South exits from bridge. 
+Car 19 dir South exits from bridge. 
+Car 22 dir South crossing the bridge. The current dir: South. #Cars: 1. 
+Car 22 dir South exits from bridge. 
+Car 20 dir North arrives at bridge. 
+Car 17 dir North arrives at bridge. 
+
+
+PROFESSOR AND STUDENT ALGORITHM:
+- whenever a student is ready to ask a question
+- whenever a student starts asking a question
+- whenever a student is done asking a question
+- whenever a student receives the answer and leaves
+- whenever the professor wants to be asked a question
+- whenever the professor starts an answer
+- whenever the professor is finished with an answer
+
+How to run: use command "make" inside the directiory, then enter "./profstud 5
+(5 repesents the number of students)
+
+For this program we have multiple students asking one professor a question. The professor can only answer one question at a time, and once he is done, he must answer another students question. To make this happen, we needed multiple threads for each student and one thread for the professor. semaphores were needed to place student on wait when the professor is busy, then unlock when the professor is ready to answer the question. For the student function (which has multiple threads), the particular student will start asking the professor a question. the question will then go to the questionstart function and place that student on wait. the student will then ask the question when ready and complete the asked question. the professor will then seek the available student and unlock the question ready semaphore. the professor will then begin answering the question and complete it. the student will then receive the answer from the professor and leave which will then allow another student in to ask a question. This scenario will continue until there are no more students ready to ask questions. 
+
+Output:
+Student 1: The student is ready to ask a question.
+Student 1 : The student is asking a question.
+Student 2: The student is ready to ask a question.
+The professor wants to be asked a question.
+Student 3: The student is ready to ask a question.
+The Professor is answering the question.
+The professor is finished with the answer.
+Student 4: The student is ready to ask a question.
+Student 1 : The student receives the answer and leaves.
+The professor wants to be asked a question.
+Student 5: The student is ready to ask a question.
+Student 1 : The student is done asking a question.
+Student 2 : The student is asking a question.
+The Professor is answering the question.
+The professor is finished with the answer.
+The professor wants to be asked a question.
+Student 2 : The student receives the answer and leaves.
+Student 2 : The student is done asking a question.
+Student 4 : The student is asking a question.
+The Professor is answering the question.
+The professor is finished with the answer.
+The professor wants to be asked a question.
+Student 4 : The student receives the answer and leaves.
+Student 4 : The student is done asking a question.
+Student 3 : The student is asking a question.
+The Professor is answering the question.
+The professor is finished with the answer.
+The professor wants to be asked a question.
+Student 3 : The student receives the answer and leaves.
+Student 3 : The student is done asking a question.
+Student 5 : The student is asking a question.
+The Professor is answering the question.
+The professor is finished with the answer.
+Student 5 : The student receives the answer and leaves.
+Student 5 : The student is done asking a question.
